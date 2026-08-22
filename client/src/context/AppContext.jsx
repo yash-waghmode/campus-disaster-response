@@ -3,22 +3,20 @@ import React, { createContext, useState, useContext } from 'react';
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
-  // App Mode: 'education' or 'response'
-  const [appMode, setAppMode] = useState('education');
-
-  // Active user status: 'unknown', 'safe', 'injured', 'trapped'
+  const [isEmergency, setIsEmergency] = useState(false);
   const [userStatus, setUserStatus] = useState('unknown');
-
-  // Global Alert states: { message: string, type: 'info' | 'warning' | 'error' } | null
-  const [globalAlert, setGlobalAlert] = useState(null);
+  const [quizScore, setQuizScore] = useState(0);
+  const [activeTab, setActiveTab] = useState('home');
 
   const value = {
-    appMode,
-    setAppMode,
+    isEmergency,
+    setIsEmergency,
     userStatus,
     setUserStatus,
-    globalAlert,
-    setGlobalAlert,
+    quizScore,
+    setQuizScore,
+    activeTab,
+    setActiveTab,
   };
 
   return (
@@ -28,7 +26,12 @@ export const AppProvider = ({ children }) => {
   );
 };
 
-// Custom hook for easy access in components
 export const useAppContext = () => {
-  return useContext(AppContext);
+  const context = useContext(AppContext);
+  if (!context) {
+    throw new Error('useAppContext must be used within an AppProvider');
+  }
+  return context;
 };
+
+export default AppContext;
